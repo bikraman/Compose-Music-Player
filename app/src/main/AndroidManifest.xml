@@ -15,7 +15,7 @@
         android:theme="@style/Theme.ComposeMusicPlayer"
         tools:targetApi="31">
         <activity
-            android:name=".MusicPlayer"
+            android:name=".MusicPlayerActivity"
             android:exported="false"
             android:label="@string/title_activity_music_player"
             android:theme="@style/Theme.ComposeMusicPlayer" />

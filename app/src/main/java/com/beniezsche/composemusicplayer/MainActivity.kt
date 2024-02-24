@@ -1,9 +1,11 @@
 package com.beniezsche.composemusicplayer
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +21,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -84,7 +87,12 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun SongItem(albumCoverIcon: String, name: String, artistName: String) {
 
-    Row(modifier = Modifier.padding(20.dp)){
+    val context = LocalContext.current
+
+    Row(modifier = Modifier.padding(20.dp).clickable {
+        val intent = Intent(context, MusicPlayerActivity::class.java )
+        context.startActivity(intent)
+    }){
         GlideImage(model = "https://cms.samespace.com/assets/$albumCoverIcon",
             contentDescription = name,
             contentScale = ContentScale.Crop,
