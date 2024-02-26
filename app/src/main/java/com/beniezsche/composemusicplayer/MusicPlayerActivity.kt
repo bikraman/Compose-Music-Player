@@ -4,7 +4,9 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +36,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -67,20 +70,20 @@ class MusicPlayerActivity : ComponentActivity() {
 fun MusicPlayerUI() {
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 200.dp),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(100.dp))
         AlbumArt()
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Text(text = "Song Title", style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Bold)
         Text(text = "Artist Name", style = TextStyle(fontSize = 16.sp))
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(70.dp))
         LinearProgressIndicator(progress = 0.5f, modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 40.dp, end = 40.dp)) //, Color(43), Color(43))
+            .padding(start = 40.dp, end = 40.dp))
+        Spacer(modifier = Modifier.height(70.dp))
         PlaybackControls()
     }
 }
@@ -88,13 +91,13 @@ fun MusicPlayerUI() {
 @Composable
 fun AlbumArt() {
     Box(
-        modifier = Modifier.size(250.dp),
+//        modifier = Modifier.size(250.dp).border( border = BorderStroke(2.dp,Color.Red)),
         contentAlignment = Alignment.Center
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_launcher_foreground),
             contentDescription = "Album Art",
-            modifier = Modifier.size(200.dp)
+            modifier = Modifier.size(350.dp).border( border = BorderStroke(2.dp,Color.Red))
         )
     }
 }
