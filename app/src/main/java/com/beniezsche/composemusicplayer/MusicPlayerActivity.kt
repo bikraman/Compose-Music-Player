@@ -48,10 +48,12 @@ import com.beniezsche.composemusicplayer.models.MusicPlayer
 import com.beniezsche.composemusicplayer.ui.theme.ComposeMusicPlayerTheme
 
 class MusicPlayerActivity : ComponentActivity() {
+
+    lateinit var songUrl: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
+        songUrl = intent.getStringExtra("url").toString()
         setContent {
             ComposeMusicPlayerTheme {
                 // A surface container using the 'background' color from the theme
@@ -64,34 +66,71 @@ class MusicPlayerActivity : ComponentActivity() {
             }
         }
     }
-}
 
-@Composable
-fun MusicPlayerUI() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(modifier = Modifier.height(100.dp))
-        AlbumArt()
-        Spacer(modifier = Modifier.height(20.dp))
-        Text(text = "Song Title", style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Bold)
-        Text(text = "Artist Name", style = TextStyle(fontSize = 16.sp))
-        Spacer(modifier = Modifier.height(70.dp))
-        LinearProgressIndicator(progress = 0.5f, modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 40.dp, end = 40.dp))
-        Spacer(modifier = Modifier.height(70.dp))
-        PlaybackControls()
+    @Composable
+    fun PlaybackControls() {
+
+        val player = remember { mutableStateOf(MusicPlayer()) }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            IconButton(
+                onClick = { /* Handle skip to previous */ }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "Previous"
+                )
+            }
+            IconButton(
+                onClick = { player.value.playAudioFromUrl(songUrl) }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.PlayArrow,
+                    contentDescription = "Play/Pause"
+                )
+            }
+            IconButton(
+                onClick = { /* Handle skip to next */ }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowRight,
+                    contentDescription = "Next"
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun MusicPlayerUI() {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(100.dp))
+            AlbumArt()
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(text = "Song Title", style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Bold)
+            Text(text = "Artist Name", style = TextStyle(fontSize = 16.sp))
+            Spacer(modifier = Modifier.height(70.dp))
+            LinearProgressIndicator(progress = 0.5f, modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 40.dp, end = 40.dp))
+            Spacer(modifier = Modifier.height(70.dp))
+            PlaybackControls()
+        }
     }
 }
+
+
 
 @Composable
 fun AlbumArt() {
     Box(
-//        modifier = Modifier.size(250.dp).border( border = BorderStroke(2.dp,Color.Red)),
         contentAlignment = Alignment.Center
     ) {
         Image(
@@ -102,41 +141,7 @@ fun AlbumArt() {
     }
 }
 
-@Composable
-fun PlaybackControls() {
 
-//    val player = remember { mutableStateOf(MusicPlayer()) }
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        IconButton(
-            onClick = { /* Handle skip to previous */ }
-        ) {
-            Icon(
-                imageVector = Icons.Default.KeyboardArrowLeft,
-                contentDescription = "Previous"
-            )
-        }
-        IconButton(
-            onClick = { }
-        ) {
-            Icon(
-                imageVector = Icons.Default.PlayArrow,
-                contentDescription = "Play/Pause"
-            )
-        }
-        IconButton(
-            onClick = { /* Handle skip to next */ }
-        ) {
-            Icon(
-                imageVector = Icons.Default.KeyboardArrowRight,
-                contentDescription = "Next"
-            )
-        }
-    }
-}
 
 
 @Composable

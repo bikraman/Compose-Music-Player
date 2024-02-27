@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
                                 itemList[it].id
                             },
                             itemContent = {index: Int ->
-                                SongItem(albumCoverIcon = itemList[index].cover , name = itemList[index].name, artistName = itemList[index].artist)
+                                SongItem(itemList[index])//albumCoverIcon = itemList[index].cover , name = itemList[index].name, artistName = itemList[index].artist)
                             }
                         )
                     }
@@ -85,12 +85,18 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun SongItem(albumCoverIcon: String, name: String, artistName: String) {
+fun SongItem(songItem: SongModel) { //albumCoverIcon: String, name: String, artistName: String) {
 
     val context = LocalContext.current
 
+    val albumCoverIcon = songItem.cover
+    val name = songItem.name
+    val artistName = songItem.artist
+//    val albumName =
+
     Row(modifier = Modifier.padding(20.dp).clickable {
         val intent = Intent(context, MusicPlayerActivity::class.java )
+        intent.putExtra("url", songItem.url)
         context.startActivity(intent)
     }){
         GlideImage(model = "https://cms.samespace.com/assets/$albumCoverIcon",

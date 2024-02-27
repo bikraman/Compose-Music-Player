@@ -29,8 +29,6 @@ class MusicPlayer {
         else {
             return mediaPlayer!!
         }
-
-
     }
 
     fun playAudioFromUrl(url: String) {
