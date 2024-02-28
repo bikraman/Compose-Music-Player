@@ -95,18 +95,20 @@ fun SongItem(songItem: SongModel) { //albumCoverIcon: String, name: String, arti
 //    val albumName =
 
     Row(modifier = Modifier.padding(20.dp).clickable {
-        val intent = Intent(context, MusicPlayerActivity::class.java )
-        intent.putExtra("url", songItem.url)
-        context.startActivity(intent)
-    }){
+            val intent = Intent(context, MusicPlayerActivity::class.java )
+            intent.putExtra("song", songItem)
+//            intent.putExtra("url", songItem.url)
+            context.startActivity(intent)
+        }
+    ) {
         GlideImage(model = "https://cms.samespace.com/assets/$albumCoverIcon",
             contentDescription = name,
             contentScale = ContentScale.Crop,
             modifier = Modifier.size(48.dp)
         )
         Column(modifier = Modifier.padding(start = 10.dp)) {
-            Text(text = name, fontSize = 17.sp)
-            Text(text = artistName, fontSize = 15.sp)
+            Text(text = name!!, fontSize = 17.sp)
+            Text(text = artistName!!, fontSize = 15.sp)
         }
     }
 

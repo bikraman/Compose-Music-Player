@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -45,15 +46,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.beniezsche.composemusicplayer.models.MusicPlayer
+import com.beniezsche.composemusicplayer.models.SongModel
 import com.beniezsche.composemusicplayer.ui.theme.ComposeMusicPlayerTheme
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 
 class MusicPlayerActivity : ComponentActivity() {
 
-    lateinit var songUrl: String
+    lateinit var song: SongModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        songUrl = intent.getStringExtra("url").toString()
+        song = intent.getParcelableExtra("song")!!
         setContent {
             ComposeMusicPlayerTheme {
                 // A surface container using the 'background' color from the theme
@@ -61,7 +65,7 @@ class MusicPlayerActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MusicPlayerUI()
+                    MusicPlayerUI(song = song)
                 }
             }
         }
@@ -85,7 +89,7 @@ class MusicPlayerActivity : ComponentActivity() {
                 )
             }
             IconButton(
-                onClick = { player.value.playAudioFromUrl(songUrl) }
+                onClick = { player.value.playAudioFromUrl(song.url!!) }
             ) {
                 Icon(
                     imageVector = Icons.Default.PlayArrow,
@@ -104,7 +108,7 @@ class MusicPlayerActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MusicPlayerUI() {
+    fun MusicPlayerUI(song: SongModel) {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -112,50 +116,56 @@ class MusicPlayerActivity : ComponentActivity() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(100.dp))
-            AlbumArt()
+            AlbumArt(song.cover!!)
             Spacer(modifier = Modifier.height(20.dp))
-            Text(text = "Song Title", style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Bold)
-            Text(text = "Artist Name", style = TextStyle(fontSize = 16.sp))
+            Text(text = song.name!!, style = TextStyle(fontSize = 20.sp), fontWeight = FontWeight.Bold)
+            Text(text = song.artist!!, style = TextStyle(fontSize = 16.sp))
             Spacer(modifier = Modifier.height(70.dp))
             LinearProgressIndicator(progress = 0.5f, modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 40.dp, end = 40.dp))
             Spacer(modifier = Modifier.height(70.dp))
+
+
             PlaybackControls()
+        }
+    }
+
+    @OptIn(ExperimentalGlideComposeApi::class)
+    @Composable
+    fun AlbumArt(albumArt: String) {
+        Box(
+            contentAlignment = Alignment.Center
+        ) {
+            GlideImage(
+                model = "https://cms.samespace.com/assets/$albumArt",
+                contentDescription = "Album Art",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(350.dp)
+            )
+        }
+    }
+
+
+
+
+    @Composable
+    fun Greeting2(name: String, modifier: Modifier = Modifier) {
+        Text(
+            text = "Hello $name!",
+            modifier = modifier
+        )
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun GreetingPreview2() {
+        ComposeMusicPlayerTheme {
+            MusicPlayerUI(song)
         }
     }
 }
 
 
 
-@Composable
-fun AlbumArt() {
-    Box(
-        contentAlignment = Alignment.Center
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_launcher_foreground),
-            contentDescription = "Album Art",
-            modifier = Modifier.size(350.dp).border( border = BorderStroke(2.dp,Color.Red))
-        )
-    }
-}
-
-
-
-
-@Composable
-fun Greeting2(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview2() {
-    ComposeMusicPlayerTheme {
-        MusicPlayerUI()
-    }
-}

@@ -2,13 +2,15 @@ package com.beniezsche.composemusicplayer.models
 
 import android.content.Context
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.MediaPlayer
+import androidx.core.app.NotificationCompat.StreamType
 
 class MusicPlayer {
 
     private var mediaPlayer: MediaPlayer? = null
 
-    fun getPlayer() : MediaPlayer {
+    private fun getPlayer() : MediaPlayer {
 
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer().apply {
@@ -32,8 +34,23 @@ class MusicPlayer {
     }
 
     fun playAudioFromUrl(url: String) {
-        mediaPlayer?.setDataSource(url)
-        mediaPlayer?.prepare() // might take long! (for buffering, etc)
-        mediaPlayer?.start()
+        getPlayer().let {
+            try {
+                it.setDataSource(url)
+                it.prepareAsync() // might take long! (for buffering, etc)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            it.setOnPreparedListener {mediaPlayer ->
+                mediaPlayer.start()
+            }
+        }
+
+        getPlayer().setOnPreparedListener {
+            it.start()
+        }
     }
+
+
 }
